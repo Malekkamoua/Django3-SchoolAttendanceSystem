@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="item-title">
+    <h3> {{class.name}} </h3>
+</div>
+
+<div class="row gutters-20">
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="dashboard-summery-one mg-b-20">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <div class="item-icon bg-light-green ">
+                        <i class="flaticon-classmates text-green"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="item-content">
+                        <div class="item-title">Students</div>
+                        <div class="item-number"><span class="counter">{{students.count}}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xl-3 col-sm-6 col-12">
+        <div class="dashboard-summery-one mg-b-20">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <div class="item-icon bg-light-blue">
+                        <i class="flaticon-multiple-users-silhouette text-blue"></i>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="item-content">
+                        <div class="item-title">Teachers</div>
+                        <div class="item-number"><span class="counter">{{courses.count}}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="float: right;">
+    <form action="{% url 'levels:level-delete' class.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit"  type="button"
+        data-toggle="tooltip" data-placement="top" title="Delete" class="btn radius-30 text-light shadow-red bg-red">Delete</button>
+    </form>
+    <a href="{% url 'levels:level-update' class_id=class.id %}" type="submit" data-toggle="tooltip" data-placement="top" title="Update" class="btn radius-30 text-light shadow-light-sea-green    bg-light-sea-green">Update</a>
+</div>
+<div class="table-responsive">
+    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+        <table class="table display data-table text-nowrap dataTable no-footer" id="DataTables_Table_0" role="grid">
+            <thead>
+                <tr role="row">
+
+                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="Photo: activate to sort column ascending" style="width: 43px;">Photo
+                    </th>
+                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="Name: activate to sort column ascending" style="width: 82px;">Name
+                    </th>
+                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                        aria-label="Phone: activate to sort column ascending" style="width: 101px;">
+                        Phone</th>
+                    <th rowspan="1" colspan="1" aria-label="E-mail: activate to sort column ascending"
+                        style="width: 168px;">E-mail</th>
+                    <th rowspan="1" colspan="1" aria-label="" style="width: 48px;"></th>
+                    {% if courseid != 0 %}
+                    <th rowspan="1" colspan="1" style="width: 87px;">
+                        <div class="form-check">
+                            <label class="form-check-label">Présent</label>
+                            <input type="checkbox" class="form-check-input checkAll">
+                        </div>
+                    </th>
+                    {% endif %}
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <form action="{% url 'students:student-attendance-mark' %}" method="post">
+                    {% csrf_token %}
+                    <tr role="row" class="odd">
+                        <td class="text-center"><img class="avatar" src="{{student.profile_pic.url}}" alt="student">
+                        </td>
+                        <td class="text-left"><a href="{% url 'students:student-profile' student_id=student.id %}">
+                                {{student.last_name}} {{student.first_name}} </a></td>
+                        <td>{{student.phone}}</td>
+                        <td>{{student.email}}</td>
+                        <td>
+                        </td>
+                        {% if courseid != 0 %}
+                        <td class="sorting_1">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" name="p" value={{student.id}}>
+                                <label class="form-check-label"> </label>
+                            </div>
+                        </td>
+                        {% else %}
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a href="{% url 'students:student-update' student_id=student.id %}" type="button"
+                                data-toggle="tooltip" data-placement="top" title="Update"
+                                class="btn radius-30 text-light bg-orange-peel"><i
+                                    style="position: relative; left:-20%;" class="fas fa-cog mg-l-10"></i></a>
+
+                            <form action="{% url 'students:student-delete' student_id=student.id class_id=class.id%}"
+                                method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn radius-30 text-light bg-red" data-toggle="tooltip"
+                                    data-placement="top" title="Delete"><i style="position: relative; left:-20%;"
+                                        class="fas fa-exclamation-circle mg-l-10"></i></button>
+                            </form>
+
+
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+            </tbody>
+        </table>
+        {% if courseid != 0 %}
+        <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 float-right form-group">
+            <input type="hidden" name="course_id" value={{courseid}}>
+            <input type="submit" class="fw-btn-fill btn-gradient-yellow" value="Mark P" />
+        </div>
+        {% endif %}
+        </form>
+    </div>
+</div>
+
+{% endblock %}

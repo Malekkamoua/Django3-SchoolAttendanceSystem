@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="item-title">
+    <h3> {{classe.name}}</h3>
+</div>
+
+<div class="row gutters-20">
+        <div class="col-xl-3 col-sm-6 col-12">
+        <div class="dashboard-summery-one mg-b-20">
+            <div class="row align-items-center">
+                <div class="col-6">
+                    <div class="item-icon bg-light-green ">
+                        <i class="flaticon-classmates text-green"></i>
+                    </div>
+                </div>
+
+                <div class="col-6">
+                    <div class="item-content">
+                        <div class="item-title">Students</div>
+                        <div class="item-number"><span class="counter"> {{students.count}} </span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        </div>
+
+    <div class="col-3-xxxl col-sm-6 col-12">
+                        <div class="dashboard-summery-one">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="item-icon bg-light-red">
+                                        <i class="flaticon-money text-red"></i>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="item-content">
+                                        <a href="{% url 'students:students-stats' course_id=courseid class_id=classid teacher_id=request.user.id %}">
+
+                                        <div class="item-title">Statistics</div>
+                                            <div class="item-number"><span>%</span><span class="counter" > {{pourcentage}} </span></div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+</div>
+
+<div class="col-12">
+    <div class="card">
+        <div class="card height-auto">
+            <div class="card-body">
+                <form class="mg-b-20">
+                    <div class="row gutters-8">
+
+                        <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                            <input type="number" name="cin" step="any" id="id_cin" placeholder="CIN" class="form-control">
+                        </div>
+                        <div class="col-4-xxxl col-xl-4 col-lg-3 col-12 form-group">
+                            <input type="text" name="last_name" id="id_last_name" class="form-control" placeholder="Last name">
+                        </div>
+                        <div class="col-4-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                            <input type="text" name="first_name" placeholder="First name" class="form-control" id="id_first_name">
+                        </div>
+                        <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                            <button type="submit" class="btn btn-success">SEARCH</button> <br>
+                            <button onClick="window.location.href=window.location.href" class="btn btn-warning" >Reset</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                        <table class="table display data-table text-nowrap dataTable no-footer" id="DataTables_Table_0"
+                            role="grid">
+                            <thead>
+                                <tr role="row">
+
+                                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                        aria-label="Photo: activate to sort column ascending" style="width: 43px;">Photo
+                                    </th>
+                                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                        aria-label="Name: activate to sort column ascending" style="width: 82px;">Name
+                                    </th>
+                                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                        aria-label="Phone: activate to sort column ascending" style="width: 101px;">
+                                        Phone</th>
+                                    <th rowspan="1" colspan="1" aria-label="E-mail: activate to sort column ascending"
+                                        style="width: 168px;">E-mail</th>
+                                    <th rowspan="1" colspan="1" aria-label="" style="width: 48px;"></th>
+                                    {% if courseid != 0 %}
+                                        <th rowspan="1" colspan="1" style="width: 87px;">
+                                            <div class="form-check">
+                                                <label class="form-check-label">Présent</label>
+                                                <input type="checkbox" class="form-check-input checkAll">
+                                            </div>
+                                        </th>
+                                    {% endif %}
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                                            <hr>
+
+                            <form action="{% url 'students:student-attendance-mark-automatically' %}" enctype="multipart/form-data" method="post">
+                                    {% csrf_token %}
+                                    <input type="file" name="pic" required>
+                                    <input type="text" name="course_id" value={{courseid}} hidden>
+                                    <input type="text" name="class_id" value={{classe.id}} hidden>
+                                    <input type="text" name="teacher_id" value={{request.user.id}} hidden>
+                                    <input type="submit" class="btn btn-gradient-yellow" style="    position: relative;
+    top: -45px;
+    left: 45%;
+    height: 35px;
+    color: white;
+    font-size: 14px;" value="mark presence">
+                                <hr>
+                            </form>
+
+                            <form action="{% url 'students:student-attendance-mark' %}" method="post">
+                                    {% csrf_token %}
+                                        {% for student in students %}
+                                        <tr role="row" class="odd">
+                                            <td class="text-center"><img class="avatar" src="{{student.profile_pic.url}}"
+                                                    alt="student">
+                                            </td>
+                                            <td class="text-left"><a
+                                                    href="{% url 'students:student-profile' student_id=student.id %}">
+                                                    {{student.last_name}} {{student.first_name}} </a></td>
+                                            <td>{{student.phone}}</td>
+                                            <td>{{student.email}}</td>
+                                            <td>
+                                            </td>
+                                            {% if courseid != 0 %}
+                                                <td class="sorting_1">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" name="p" value={{student.id}}>
+                                                        <label class="form-check-label"> </label>
+                                                    </div>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                                {% if courseid != 0 %}
+                                    <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 float-right form-group">
+                                        <input type="text" name="course_id" value={{courseid}} hidden>
+                                        <input type="text" name="class_id" value={{classe.id}} hidden>
+                                        <input type="submit" class="fw-btn-fill btn-gradient-yellow" value="Mark P"/>
+                                    </div>
+                                {% endif %}
+                            </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

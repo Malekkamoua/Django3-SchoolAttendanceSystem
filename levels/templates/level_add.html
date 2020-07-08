@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<form method="POST" action="" class="login-form">
+    {% csrf_token %}
+   {{form.errors}}
+    {{form.as_p}}
+
+    <button type="submit"
+        class="btn-fill-lmd radius-30 text-light shadow-light-sea-green    bg-light-sea-green">Send</button>
+</form>
+{% endblock %}

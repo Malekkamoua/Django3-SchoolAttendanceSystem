@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-body">
+      <form class="mg-b-20">
+                    <div class="row gutters-8">
+                        {{ my_filter.form}}
+                        <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                            <input type="text" name="name"  id="name" placeholder="Class name" class="form-control">
+                        </div>
+                        <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                            <button type="submit" class="btn btn-success">SEARCH</button> <br>
+                            <button onClick="window.location.href=window.location.href" class="btn btn-warning" >Reset</button>
+                        </div>
+                    </div>
+                </form>
+    <div class="row">
+
+        {% for class in classes %}
+        <div class="col-sm-6 col-md-6 col-lg-3">
+            <div class="team-block">
+                <a href="{% url 'courses:course-list' class_id=class.id %}" class="btn btn-gradient-yellow" style="    margin: 4% 4% 4% 0;
+               height: 75px;
+               width: 175px;
+               color: white;
+               font-style: bolder;
+               font-size: 15px;"><span style="position: relative;top: 20px;display: flex;justify-content: center;flex-wrap: wrap;"> {{class.name}} </span></a>
+            </div>
+        </div>
+        {% endfor %}
+        <div>
+        </div>
+        {% endblock %}

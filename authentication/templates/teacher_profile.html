@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="POST" action="" enctype="multipart/form-data">
+
+	{{form.errors}}
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label>CIN</label>
+        <input type="number" name="cin" class="form-control" value={{teacher.cin}}>
+    </div>
+
+    <div class="form-group">
+        <label>First name</label>
+        <input type="text" name="first_name" class="form-control" value={{teacher.first_name}}>
+    </div>
+
+    <div class="form-group">
+        <label>last name</label>
+        <input type="text" name="last_name" class="form-control" value={{teacher.last_name}}>
+    </div>
+
+    <div class="form-group">
+        <label>Phone</label>
+        <input type="number" name="phone" class="form-control" value={{teacher.phone}}>
+    </div>
+
+    <div class="form-group">
+        <label>Email</label>
+        <input type="email" name="email" class="form-control" value={{teacher.email}}>
+    </div>
+
+    <div class="form-group">
+        <label>Class</label>
+        <input type="text" name="name" class="form-control" value={{class}}>
+    </div>
+
+
+    <button type="submit"
+        class="btn-fill-lmd radius-30 text-light shadow-light-sea-green    bg-light-sea-green">Update </button>
+
+</form>
+{% endblock %}

@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+
+<form method="POST" action="" class="login-form">
+    {% csrf_token %}
+
+    <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" class="form-control" value={{course.name}}>
+    </div>
+
+    <div class="form-group">
+        <label>Number of absences</label>
+        <input type="number" name="absences_number" class="form-control" value={{course.absences_number}}>
+    </div>
+    <br>
+
+    <div class="form-group">
+        {% if is_update %}
+            <button type="submit" class="btn radius-30 text-light shadow-light-sea-green    bg-light-sea-green">Update</button>
+        {% else %}
+            <button type="submit"
+            class="btn-fill-lmd radius-30 text-light shadow-light-sea-green    bg-light-sea-green">Send</button>
+        {% endif %}
+    </div>
+</form>
+
+    {% if is_update %}
+
+    <form action="{% url 'courses:course-delete' course.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit" style="position: relative;
+        top: -38px;
+        left: 6%;" class="btn radius-30 text-light shadow-red bg-red">Delete</button>
+    </form>
+    {% endif %}
+
+{% endblock %}

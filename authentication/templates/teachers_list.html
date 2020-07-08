@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="col-12">
+    <div class="card">
+        <div class="card height-auto">
+            <div class="card-body">
+                <div class="heading-layout1">
+                    <div class="item-title">
+                        <h3>All teachers Data</h3>
+                    </div>
+                    <div class="dropdown">
+                        <a class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"
+                            aria-expanded="false">...</a>
+
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="#"><i class="fas fa-times text-orange-red"></i>Close</a>
+                            <a class="dropdown-item" href="#"><i class="fas fa-cogs text-dark-pastel-green"></i>Edit</a>
+                            <a class="dropdown-item" href="#"><i
+                                    class="fas fa-redo-alt text-orange-peel"></i>Refresh</a>
+                        </div>
+                    </div>
+                </div>
+                  <form class="mg-b-20">
+                    <div class="row gutters-8">
+                        {{ my_filter.form}}
+                        <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                            <input type="text" name="first_name"  id="name" placeholder="First name" class="form-control">
+                        </div>
+                         <div class="col-3-xxxl col-xl-3 col-lg-3 col-12 form-group">
+                            <input type="text" name="last_name"  placeholder="Last name" class="form-control">
+                        </div>
+                        <div class="col-1-xxxl col-xl-2 col-lg-3 col-12 form-group">
+                            <button type="submit" class="btn btn-success">SEARCH</button> <br>
+                            <button onClick="window.location.href=window.location.href" class="btn btn-warning" >Reset</button>
+                        </div>
+                    </div>
+                </form>
+                <div class="table-responsive">
+                    <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer">
+                        <table class="table display data-table text-nowrap dataTable no-footer" id="DataTables_Table_0"
+                            role="grid">
+                            <thead>
+                                <tr role="row">
+                                    <th></th>
+                                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                        aria-label="Name: activate to sort column ascending" style="width: 82px;">Name
+                                    </th>
+                                    <th tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1"
+                                        aria-label="Phone: activate to sort column ascending" style="width: 101px;">
+                                        Phone</th>
+                                    <th rowspan="1" colspan="1" aria-label="E-mail: activate to sort column ascending"
+                                        style="width: 168px;">E-mail</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for teacher in teachers %}
+
+                                <tr role="row" class="odd">
+                                    <td class="text-center"><img class="avatar" src="{{teacher.profile_pic.url}}"
+                                            alt="{{teacher.last_name}} {{teacher.first_name}}">
+                                    </td>
+                                    <td class="text-left"><a href="{% url 'teachers:profile' teacher_id=teacher.id %}">
+                                            {{teacher.last_name}} {{teacher.first_name}} </a></td>
+                                    <td>{{teacher.user.phone}}</td>
+                                    <td>{{teacher.user.email}}</td>
+
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>
+                                        <a href="{% url 'teachers:teacher-update' teacher_id=teacher.id %}"
+                                            type="button" data-toggle="tooltip" data-placement="top" title="Update"
+                                            class="btn radius-30 text-light bg-orange-peel"><i
+                                                style="position: relative; left:-20%;"
+                                                class="fas fa-cog mg-l-10"></i></a>
+
+                                        <form
+                                            action="{% url 'teachers:teacher-delete' teacher_id=teacher.id %}"
+                                            method="post">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn radius-30 text-light bg-red"
+                                                data-toggle="tooltip" data-placement="top" title="Delete"><i
+                                                    style="position: relative; left:-20%;"
+                                                    class="fas fa-exclamation-circle mg-l-10"></i></button>
+                                        </form>
+
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
